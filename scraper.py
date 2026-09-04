@@ -126,6 +126,10 @@ def _element_to_field(el: Tag, root_soup: BeautifulSoup) -> FormField | None:
 
     label = _find_label(el, root_soup)
 
+    # Skip fields with no identifying info (ghost/decorative elements)
+    if tag != "select" and not any([name, field_id, placeholder, label]):
+        return None
+
     options: list[str] = []
     if tag == "select":
         options = [

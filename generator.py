@@ -44,6 +44,10 @@ def generate_credentials(
 
 def _generate_value(fake: Faker, cf: ClassifiedField) -> str:
     """Dispatch to the correct Faker method based on semantic type."""
+    # For dropdowns with predefined options, always pick from them
+    if cf.raw.tag == "select" and cf.raw.options:
+        return random.choice(cf.raw.options)
+
     ft = cf.semantic_type
     generators: dict[FieldType, callable] = {
         FieldType.FIRST_NAME: lambda: fake.first_name(),

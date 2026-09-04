@@ -14,6 +14,7 @@ class FieldType(Enum):
     EMAIL = auto()
     PHONE = auto()
     PASSWORD = auto()
+    CONFIRM_PASSWORD = auto()
     USERNAME = auto()
     DATE_OF_BIRTH = auto()
     AGE = auto()

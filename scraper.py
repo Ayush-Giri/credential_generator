@@ -111,8 +111,11 @@ def _element_to_field(el: Tag, root_soup: BeautifulSoup) -> FormField | None:
     tag = el.name
     input_type = (el.get("type") or "text").lower()
 
-    # Skip non-user fields
-    if input_type in ("hidden", "submit", "button", "image", "reset"):
+    # Skip non-writable fields
+    if input_type in (
+        "hidden", "submit", "button", "image", "reset",
+        "checkbox", "radio", "file", "color", "range",
+    ):
         return None
 
     name = el.get("name", "")

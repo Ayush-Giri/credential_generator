@@ -13,7 +13,11 @@ _KEYWORD_MAP: list[tuple[list[str], FieldType]] = [
     (["email", "e-mail", "e_mail", "emailaddress"], FieldType.EMAIL),
     # Phone
     (["phone", "tel", "mobile", "cell", "fax", "phonenumber"], FieldType.PHONE),
-    # Password
+    # Password (confirm before regular – more specific first)
+    (["confirm_password", "confirmpassword", "confirm-password", "password_confirm",
+     "password_confirmation", "passwordconfirmation", "repassword", "re_password",
+     "re-password", "pass_confirm", "pass2", "password2", "pwd_confirm", "repeat_password",
+     "repeatpassword", "verify_password", "verifypassword"], FieldType.CONFIRM_PASSWORD),
     (["password", "passwd", "pass", "pwd", "secret"], FieldType.PASSWORD),
     # Username
     (["username", "user_name", "userid", "login", "screenname", "handle"], FieldType.USERNAME),

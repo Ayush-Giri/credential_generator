@@ -16,15 +16,24 @@ def generate_credentials(
     """Generate a dict of ``{display_name: generated_value}`` for each field.
 
     Uses the Faker library with the given *locale* to produce realistic data.
+    Password and confirm-password fields always get the same value.
     """
     fake = Faker(locale)
     results: dict[str, str] = {}
 
+    # Pre-generate a single password so password + confirm password match
+    password_value = _generate_password()
+
     for cf in fields:
         if cf.semantic_type == FieldType.SKIP:
             continue
-        value = _generate_value(fake, cf)
-        results[cf.display_name] = value
+        if cf.semantic_type == FieldType.PASSWORD:
+            results[cf.display_name] = password_value
+        elif cf.semantic_type == FieldType.CONFIRM_PASSWORD:
+            results[cf.display_name] = password_value
+        else:
+            value = _generate_value(fake, cf)
+            results[cf.display_name] = value
 
     return results
 

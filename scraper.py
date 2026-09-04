@@ -97,7 +97,7 @@ def _extract_fields_from_container(
     """Extract ``FormField`` objects from a container tag."""
     fields: list[FormField] = []
 
-    for tag_name in ("input", "select", "textarea"):
+    for tag_name in ("input", "textarea"):
         for el in container.find_all(tag_name):
             ff = _element_to_field(el, root_soup)
             if ff:

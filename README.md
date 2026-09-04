@@ -1,4 +1,4 @@
-# 🔐 Credential Generator
+# Credential Generator
 
 A terminal command that generates fake credentials for any website. Just run `generate <url>` — it detects the form fields and fills them instantly.
 
@@ -7,7 +7,7 @@ A terminal command that generates fake credentials for any website. Just run `ge
 ```
 $ generate https://www.tutorialspoint.com/selenium/practice/register.php
 
-      🔐 Credentials for https://www.tutorialspoint.com/...
+      Credentials for https://www.tutorialspoint.com/...
 ┏━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃ Field              ┃ Value                          ┃
 ┡━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
@@ -77,7 +77,7 @@ The tool recognizes **25+ field types** automatically:
 ## How It Works
 
 ```
-URL → Fetch HTML → Find <form> tags → Classify fields → Generate fake data → Display
+URL -> Fetch HTML -> Find <form> tags -> Classify fields -> Generate fake data -> Display
 ```
 
 1. **Fetches** the page HTML

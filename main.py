@@ -52,7 +52,7 @@ def main():
     args = sys.argv[1:]
 
     if not args or args[0] in ("-h", "--help"):
-        console.print("[bold cyan]🔐 Credential Generator[/bold cyan]")
+        console.print("[bold cyan]Credential Generator[/bold cyan]")
         console.print("\nUsage:  [green]generate <url>[/green]  [dim]--locale en_IN  --json[/dim]")
         sys.exit(0)
 
@@ -81,7 +81,7 @@ def main():
         print(json.dumps(creds, indent=2))
     else:
         table = Table(
-            title=f"🔐 Credentials for {url}",
+            title=f"Credentials for {url}",
             header_style="bold magenta",
             border_style="cyan",
         )

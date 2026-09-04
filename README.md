@@ -1,119 +1,115 @@
 # 🔐 Credential Generator
 
-A terminal application that automatically detects form fields on any website and generates realistic fake credentials to fill them.
+A terminal command that generates fake credentials for any website. Just run `generate <url>` — it detects the form fields and fills them instantly.
 
-> **Note**: Generated data is fake but realistic-looking. It won't pass services that verify emails/phones via OTP.
+## Demo
 
-## ✨ Features
+```
+$ generate https://www.tutorialspoint.com/selenium/practice/register.php
 
-- 🌐 **URL-based** – Paste any website URL and the tool analyzes its forms
-- 🔍 **Smart field detection** – Recognizes 25+ field types (name, email, phone, address, DOB, password, etc.)
-- 🎭 **Realistic data** – Uses the Faker library for locale-aware, realistic-looking credentials
-- 🔑 **Strong passwords** – Auto-generates secure passwords with configurable complexity
-- 📋 **Copy to clipboard** – One-click copy of all generated credentials
-- 💾 **Save to JSON** – Export credentials for later reference
-- 🌍 **Locale support** – Generate data in different locales (US, India, UK, etc.)
-- 🎨 **Beautiful UI** – Rich terminal interface with colored tables and spinners
+      🔐 Credentials for https://www.tutorialspoint.com/...
+┏━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Field              ┃ Value                          ┃
+┡━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ First Name         │ Jennifer                       │
+│ lastname           │ Smith                          │
+│ UserName           │ ebean                          │
+│ Password           │ Z-*xzM4so&UDHRne               │
+└────────────────────┴────────────────────────────────┘
+```
 
-## 🚀 Installation
+## Installation
 
 ```bash
-# Clone the repository
 git clone https://github.com/Ayush-Giri/credential_generator.git
 cd credential_generator
-
-# Create virtual environment (recommended)
 python3 -m venv venv
 source venv/bin/activate
-
-# Install dependencies
 pip install -r requirements.txt
 ```
 
-### Optional: JavaScript-heavy sites
-
-For websites that render forms with JavaScript (React, Angular, etc.):
+Then add the command to your PATH — add this line to your `~/.zshrc` (or `~/.bashrc`):
 
 ```bash
-pip install playwright
-playwright install chromium
+export PATH="$HOME/Documents/credential_generator/bin:$PATH"
 ```
 
-## 📖 Usage
+Restart your terminal and you're good to go.
 
-### Interactive Mode
+## Usage
 
 ```bash
-python main.py
+generate <url>
 ```
 
-You'll see an interactive prompt where you can paste URLs and get credentials generated instantly.
-
-### Direct URL Mode
+That's it. Some examples:
 
 ```bash
-python main.py https://example.com/signup
+generate https://www.tumblr.com/register
+generate https://the-internet.herokuapp.com/login
+generate https://www.tutorialspoint.com/selenium/practice/register.php
 ```
 
-### With Locale
+### Options
 
-```bash
-python main.py https://example.com/signup --locale en_IN
+| Flag | What it does | Example |
+|------|-------------|---------|
+| `--locale` | Generate region-specific data (Indian names, phones, etc.) | `generate <url> --locale en_IN` |
+| `--json` | Output as JSON instead of a table | `generate <url> --json` |
+
+### Supported Locales
+
+`en_US` (default), `en_IN`, `en_GB`, `de_DE`, `fr_FR`, `ja_JP`, and [many more](https://faker.readthedocs.io/en/master/locales.html).
+
+## What It Detects
+
+The tool recognizes **25+ field types** automatically:
+
+| Category | Fields |
+|----------|--------|
+| **Identity** | First name, last name, full name, username, gender, age, date of birth |
+| **Contact** | Email, phone number |
+| **Auth** | Password |
+| **Location** | Full address, street, city, state, zip code, country |
+| **Professional** | Company, job title, website |
+| **Financial** | Credit card number, CVV, expiry date, SSN |
+
+## How It Works
+
+```
+URL → Fetch HTML → Find <form> tags → Classify fields → Generate fake data → Display
 ```
 
-Supported locales: `en_US`, `en_IN`, `en_GB`, `de_DE`, `fr_FR`, `ja_JP`, and [many more](https://faker.readthedocs.io/en/master/locales.html).
+1. **Fetches** the page HTML
+2. **Parses** all `<form>`, `<input>`, `<select>`, `<textarea>` elements
+3. **Classifies** each field using keyword matching on `name`, `id`, `placeholder`, `label`, and `autocomplete` attributes
+4. **Generates** realistic fake data using [Faker](https://github.com/joke2k/faker)
+5. **Displays** results in a clean terminal table
 
-## 🎯 How It Works
+## Limitations
 
-```
-URL → Fetch HTML → Parse Forms → Classify Fields → Generate Data → Display
-```
+- **JavaScript-rendered forms** (React, Angular, Vue SPAs) won't be detected with the default setup. Install Playwright for those:
+  ```bash
+  pip install playwright
+  playwright install chromium
+  ```
+- **Sites that block scrapers** (GitHub, StackOverflow, Facebook) will return errors — they require browser authentication or CAPTCHA
+- Generated data is **fake but realistic-looking**. It won't pass OTP verification or email confirmation
 
-1. **Fetch** – Downloads the page HTML (with optional Playwright fallback for SPAs)
-2. **Parse** – Extracts all `<form>`, `<input>`, `<select>`, `<textarea>` elements
-3. **Classify** – Uses a 4-layer heuristic to identify field types:
-   - `autocomplete` attribute
-   - Keyword matching on `name`, `id`, `placeholder`, `label`
-   - HTML `type` attribute
-   - Fallback to generic text
-4. **Generate** – Maps each field type to a Faker method for realistic data
-5. **Display** – Shows results in a beautiful terminal table
-
-## 🔍 Supported Field Types
-
-| Type | Examples |
-|------|----------|
-| Name | First name, last name, full name |
-| Contact | Email, phone number |
-| Auth | Username, password |
-| Personal | Age, date of birth, gender |
-| Address | Street, city, state, zip, country |
-| Professional | Company, job title |
-| Financial | Credit card, CVV, expiry |
-| Other | Website, SSN, generic text |
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 credential_generator/
-├── main.py            # CLI entry point & interactive loop
-├── scraper.py         # Web page fetching & form extraction
-├── classifier.py      # Field type classification
-├── generator.py       # Fake data generation
+├── bin/generate       # CLI command (add to PATH)
+├── main.py            # Entry point
+├── scraper.py         # Fetches pages & extracts form fields
+├── classifier.py      # Detects field types via keyword matching
+├── generator.py       # Generates fake data using Faker
 ├── models.py          # Data classes & enums
-├── requirements.txt   # Python dependencies
-└── README.md          # This file
+├── test_smoke.py      # Smoke test
+└── requirements.txt   # Dependencies
 ```
 
-## 🤝 Contributing
+## Disclaimer
 
-Pull requests are welcome! Feel free to open issues for bugs or feature requests.
-
-## ⚠️ Disclaimer
-
-This tool generates **fake data** for testing and development purposes only. Do not use it for:
-- Identity fraud or impersonation
-- Violating any website's Terms of Service
-- Any illegal activity
-
-Use responsibly and ethically.
+This tool generates **fake data** for testing and development purposes only. Do not use it for identity fraud, violating any website's Terms of Service, or any illegal activity. Use responsibly.
